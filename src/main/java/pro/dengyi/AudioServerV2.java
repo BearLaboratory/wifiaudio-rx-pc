@@ -8,8 +8,6 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 /**
  * @author dengyi (email:dengyi@dengyi.pro)
@@ -20,7 +18,7 @@ public class AudioServerV2 {
 
     public static void main(String[] args) throws IOException, LineUnavailableException {
         ServerSocket serverSocket = new ServerSocket(8888);
-        System.out.println("启动服务器....");
+        //存储文件，不存在就创建，创建就追加
         File file = new File("C:\\Users\\BLab\\Desktop\\au.raw");
         FileOutputStream fileOutputStream = new FileOutputStream(file, true);
         if (!file.exists()) {
@@ -43,11 +41,11 @@ public class AudioServerV2 {
         byte[] buffer = new byte[2];
 
         while (bis.read(buffer) != -1) {
-//            fileOutputStream.write(buffer);
-//            fileOutputStream.flush();
+            //保存至文件
+            fileOutputStream.write(buffer);
+            fileOutputStream.flush();
+            //实时播放PCM
             sourceDataLine.write(buffer, 0, 2);
-            //播放
-            //executorService.execute(new PlayThread(sourceDataLine,buffer));
 
 
         }
